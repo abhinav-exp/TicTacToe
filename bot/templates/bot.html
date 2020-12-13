@@ -1,0 +1,230 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<title>Play wuth our bot</title>
+	<style media="screen">
+		.all{
+			text-align: center;
+			width: 500px;
+			margin: auto;
+			//background-color: green;
+		}
+		table{
+			margin: auto;
+		}
+		td{
+			border: solid 2px Yellow;
+			//border-collapse: collapse;
+			background-color: Yellow;
+			margin: auto;
+		}
+		img{
+			border-radius: 20px;
+		}
+		.uppertext{
+			height: 150px;
+			font-size: 50px;
+			padding-top: 50px;
+			background-color: Yellow;
+			color: rgb(64,64,0);
+			margin-bottom: 50px;
+		}
+		button{
+			height: 50px;
+			width: 200px;
+			border-radius: 100px;
+			border:  5px black solid;
+			font-size: 25px;
+		}
+		#Restart{
+			margin-left: 5px;
+			margin-right: 80px;
+		}
+		#mini{
+			margin-top: 10px;
+			margin-left: 0px;
+		}
+	</style>
+</head>
+<body>
+	<div class="all">
+		<div class="uppertext">
+			<strong>You vs Bot</strong><br>
+			<button id = "Restart" type="button">Restart</button>
+			<button id = "Swap" type="button">
+				<img class = "mini" src="{% static 'blue.jpg' %}" height = 30px width= 30px >
+				Swap
+				<img class = "mini" src="{% static 'red.png' %}" height = 30px width= 30px >
+			</button>
+		</div>
+		<table>
+			{% for v in range3 %}
+		<tr>
+			{% for u in range3 %}
+			<td id = 'tcell{{v}}{{u}}'>
+				<img src="{% static 'blank.png' %}" alt="blue" height=150px width=150px >
+			</td>
+			{% endfor %}
+		</tr>
+			{% endfor %}
+		</table>
+	</div>
+</body>
+<script type="text/javascript">
+	var s = true
+
+	var l = document.querySelectorAll("td > img")
+	var l2 = document.querySelectorAll("button > img")
+
+	var blank = document.querySelector("td > img").src
+	var blue = l2[0].src
+	var red = l2[1].src
+
+	var current = blue
+	var opp = red
+
+	function resrt(){
+		for (var i = 0; i < l.length; i++) {
+			if(l[i].src !== blank)
+				l[i].src = blank
+		}
+		s = true
+		$("td").css("borderColor","Yellow")
+	}
+	document.querySelector("#Restart").addEventListener("click",resrt)
+
+	function swp(item){
+		var temp = current
+		current = opp
+		opp = temp
+
+		for (var i = 0; i < l2.length; i++) {
+			//console.log(l2[i]);
+			if(l2[i].src == blue)
+				l2[i].src = red
+			else if(l2[i].src == red)
+				l2[i].src = blue
+			//console.log(l2[i]);
+		};
+
+		for (var i = 0; i < l.length; i++){
+			if(l[i].src === opp)
+			{
+				//console.log("this is l "+i+" "+l[i].src);
+				l[i].src = current
+				//console.log("change to l "+i+" "+l[i].src);
+			}
+			else if (l[i].src === current) {
+				l[i].src = opp
+			}
+		};
+	}
+	document.querySelector("#Swap").addEventListener("click",swp)
+
+	function makedata(){
+		reqdata = "";
+		function addcell(item){
+			if(item.src === blank)
+				reqdata += 0;
+			else if(item.src === current)
+				reqdata += 1;
+			else if(item.src === opp)
+				reqdata += 2;
+		}
+		l.forEach(addcell);
+		return reqdata;
+	}
+
+	function check(strdata){
+		p = false
+		for (var i = 0; i < 3; i++) {
+			m = ""
+			for (var j = 0; j < 3; j++) {
+				m += strdata[i*3+j]
+			}
+			if(m == "111" || m == "222"){
+				p = true
+				for(var k=0; k<3; k++){
+					$("#tcell"+i+k).css("borderColor","black");
+				}
+				s = false;
+				break
+			}
+		}
+		if(!p){
+			for (var i = 0; i < 3; i++) {
+				m = ""
+				for (var j = 0; j < 3; j++) {
+					m += strdata[j*3+i]
+				}
+				if(m == "111" || m == "222"){
+					p = true
+					for(var k=0; k<3; k++){
+						$("#tcell"+k+i).css("borderColor","black");
+					}
+					s = false;
+					break
+				}
+			}
+		}
+		if(!p){
+			m=""
+			for (var i = 0; i < 3; i++) {
+				m += strdata[i*4]
+			}
+			if(m == "111" || m == "222"){
+				//console.log(m);
+				p = true
+				for (var i = 0; i < 3; i++) {
+					$("#tcell"+i+i).css("borderColor","black");
+					//console.log("tcell"+i+i);
+				}
+				s=false;
+			}
+		}
+		if(!p){
+			m=""
+			for (var i = 0; i < 3; i++) {
+				m += strdata[6-2*i]
+			}
+			if(m == "111" || m == "222"){
+				p = true
+				for (var i = 0; i < 3; i++) {
+					$("#tcell"+(2-i)+i).css("borderColor","black");
+				}
+				s=false;
+			}
+		}
+		return p;
+	}
+
+	function userturn(item){
+		item.addEventListener("click",function(){
+			if(item.src === blank && s )
+			{
+				s = false
+				item.src = current;
+				reqdata = makedata()
+				if(!check(reqdata)){
+					$.post("{% url 'channel' %}",
+						{
+							"data":reqdata,
+							"csrfmiddlewaretoken":"{{csrf_token}}"
+						},
+						function(data, status){
+							if(data.ok<9)
+								l[data.ok].src = opp;
+							s = true;
+							check(makedata());
+						})
+				}
+			}
+		});
+	};
+	l.forEach(userturn);
+	</script>
+</html>

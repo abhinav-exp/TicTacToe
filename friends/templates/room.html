@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      body{
+        padding: auto;
+        background-color: green;
+        text-align: center;
+      }
+      img{
+        margin-top: 100px;
+        border-radius: 30px;
+      }
+    </style>
+  </head>
+  <body onload="jsfun()">
+    <a href="">
+    	<img src="{% static 'refresh.jpg' %}" alt="refresh"
+        height="300px" width="300px">
+    </a>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  var testlink = "{% url 'play' 'test' %}".replace("test","")
+  function jsadd(){
+    $.get("{% url 'roomchannel' %}",function(data){
+      if(confirm("Room no '"+data.code+"' is ready for you\nWould you like to join it?"))
+        window.location.href = testlink+data.code;
+    })
+  }
+
+  function jsjoin(){
+
+  }
+
+  function jsfun(){
+    var ch = prompt("There are 2 options\n1.\tmake a new room\n2.\tjoin into a room\n(enter a numeric accordingly)");
+    if(ch==1)
+      jsadd();
+    else if (ch==2)
+      jsjoin();
+    else if(ch!= null)
+      alert("Wrong input!\nplease try again");
+  }
+  </script>
+</html>
