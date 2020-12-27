@@ -3,24 +3,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-	<title>Play wuth our bot</title>
+	<script src="{% static 'jquery.js' %}"></script>
+	<link rel="icon" href="{% static 'green.jpg' %}">
+	<title>Play with our bot</title>
 	<style media="screen">
 		.all{
 			text-align: center;
-			width: 500px;
 			margin: auto;
-			//background-color: green;
 		}
 		table{
-			margin: auto;
+			//margin: auto;
 		}
 		td{
 			border: solid 2px Yellow;
 			//border-collapse: collapse;
 			background-color: Yellow;
-			margin: auto;
+			//margin: auto;
 		}
 		img{
 			border-radius: 20px;
@@ -41,12 +39,12 @@
 			font-size: 25px;
 		}
 		#Restart{
-			margin-left: 5px;
-			margin-right: 80px;
+			//margin-left: 5px;
+			//margin-right: 80px;
 		}
 		#mini{
-			margin-top: 10px;
-			margin-left: 0px;
+			//margin-top: 10px;
+			//margin-left: 0px;
 		}
 	</style>
 </head>
@@ -56,9 +54,9 @@
 			<strong>You vs Bot</strong><br>
 			<button id = "Restart" type="button">Restart</button>
 			<button id = "Swap" type="button">
-				<img class = "mini" src="{% static 'blue.jpg' %}" height = 30px width= 30px >
+				<img class = "mini" src="{% static 'blue.jpg' %}">
 				Swap
-				<img class = "mini" src="{% static 'red.png' %}" height = 30px width= 30px >
+				<img class = "mini" src="{% static 'red.png' %}">
 			</button>
 		</div>
 		<table>
@@ -66,7 +64,7 @@
 		<tr>
 			{% for u in range3 %}
 			<td id = 'tcell{{v}}{{u}}'>
-				<img src="{% static 'blank.png' %}" alt="blue" height=150px width=150px >
+				<img src="{% static 'blank.png' %}" alt = "blank">
 			</td>
 			{% endfor %}
 		</tr>
@@ -74,6 +72,30 @@
 		</table>
 	</div>
 </body>
+<script type="text/javascript">
+	var win_b = $(window).width()
+	$(".all").css("width",win_b*9/10+"px")
+	var uppertext = $(".uppertext")
+	uppertext.css("height",win_b*3/10+"px")
+	uppertext.css("font-size",win_b/10+"px");
+	uppertext.css("padding-top",win_b/10+"px");
+	uppertext.css("margin-bottom",win_b/10+"px")
+	var button = $("button")
+	button.css("height",win_b/10+"px")
+	button.css("width",win_b*2/5+"px")
+	button.css("border-radius",win_b/10+"px")
+	button.css("border-width",win_b/100+"px")
+	button.css("font-size",win_b/20+"px")
+	var mini = $(".mini")
+	mini.css("height",win_b*6/100+"px")
+	mini.css("width",win_b*6/100+"px")
+	$("img").css("border-radius",win_b/25+"px")
+	var td_img = $("td > img")
+	td_img.css("height",win_b*3/10+"px")
+	td_img.css("width",win_b*3/10+"px")
+	var td = $("td")
+	td.css("border-width",win_b/250+"px")
+</script>
 <script type="text/javascript">
 	var s = true
 

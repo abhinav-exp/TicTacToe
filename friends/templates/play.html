@@ -1,10 +1,342 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
+<head>
+  <script src="{% static 'jquery.js' %}"></script>
+  <link rel="icon" href="{% static 'green.jpg' %}">
+  <title>Room no {{room_no}}</title>
+  <style media="screen">
+    .all{
+      text-align: center;
+      width: 500px;
+      margin: auto;
+      //background-color: green;
+    }
+    table{
+      margin: auto;
+    }
+    td{
+      border: solid 2px Yellow;
+      //border-collapse: collapse;
+      background-color: Yellow;
+      margin: auto;
+    }
+    img{
+      border-radius: 20px;
+    }
+    .uppertext{
+      height: 150px;
+      font-size: 50px;
+      padding-top: 50px;
+      background-color: Yellow;
+      color: rgb(64,64,0);
+      margin-bottom: 50px;
+    }
+    button{
+      height: 50px;
+      width: 200px;
+      border-radius: 100px;
+      border:  5px black solid;
+      font-size: 25px;
+    }
+    #turn{
+      color: white;
+    }
+  </style>
+</head>
   <body>
-    room no is {{ room_no }}
+    <img src="{% static 'blank.png' %}" hidden>
+    <img src="{% static 'blue.jpg' %}" hidden>
+    <img src="{% static 'red.png' %}" hidden>
+    	<div class="all">
+    		<div class="uppertext">
+    			<strong>{{ room_no }}</strong><br>
+    			<button id = "Restart" type="button">Restart</button>
+    			<button id = "turn" type="button">Your Turn</button>
+    		</div>
+    		<table>
+    			{% for v in range3 %}
+    		<tr>
+    			{% for u in range3 %}
+    			<td id = 'tcell{{v}}{{u}}'>
+    				<img src="{% static 'blank.png' %}" alt="blank" height=150px width=150px >
+    			</td>
+    			{% endfor %}
+    		</tr>
+    			{% endfor %}
+    		</table>
+    	</div>
   </body>
+  <script type="text/javascript">
+  	var win_b = $(window).width()
+  	$(".all").css("width",win_b*9/10+"px")
+  	var uppertext = $(".uppertext")
+  	uppertext.css("height",win_b*3/10+"px")
+  	uppertext.css("font-size",win_b/10+"px");
+  	uppertext.css("padding-top",win_b/10+"px");
+  	uppertext.css("margin-bottom",win_b/10+"px")
+  	var button = $("button")
+  	button.css("height",win_b/10+"px")
+  	button.css("width",win_b*2/5+"px")
+  	button.css("border-radius",win_b/10+"px")
+  	button.css("border-width",win_b/100+"px")
+  	button.css("font-size",win_b/20+"px")
+  	var mini = $(".mini")
+  	mini.css("height",win_b*6/100+"px")
+  	mini.css("width",win_b*6/100+"px")
+  	$("img").css("border-radius",win_b/25+"px")
+  	var td_img = $("td > img")
+  	td_img.css("height",win_b*3/10+"px")
+  	td_img.css("width",win_b*3/10+"px")
+  	var td = $("td")
+  	td.css("border-width",win_b/250+"px")
+  </script>
+  <script type="text/javascript">
+      {% if first %}
+        var our = $("img")[1].src
+        var opp = $("img")[2].src
+      {% else %}
+        var our = $("img")[2].src
+        var opp = $("img")[1].src
+      {% endif %}
+      var user_allow = {% if user_allow %}true{% else %}false{% endif %}
+        var blank = $("img")[0].src
+      var l = document.querySelectorAll("td > img")
+      var comp = false
+      var defaultcolor = "" ;
+      var rest = false
+
+      function check(strdata,coldata){
+    		p = false
+    		for (var i = 0; i < 3; i++) {
+    			m = ""
+    			for (var j = 0; j < 3; j++) {
+    				m += strdata[i*3+j]
+    			}
+    			if(m == coldata){
+    				p = true
+    				for(var k=0; k<3; k++){
+    					$("#tcell"+i+k).css("borderColor","black");
+    				}
+    				break
+    			}
+    		}
+    		if(!p){
+    			for (var i = 0; i < 3; i++) {
+    				m = ""
+    				for (var j = 0; j < 3; j++) {
+    					m += strdata[j*3+i]
+    				}
+    				if(m == coldata){
+    					p = true
+    					for(var k=0; k<3; k++){
+    						$("#tcell"+k+i).css("borderColor","black");
+    					}
+    					break
+    				}
+    			}
+    		}
+    		if(!p){
+    			m=""
+    			for (var i = 0; i < 3; i++) {
+    				m += strdata[i*4]
+    			}
+    			if(m == coldata){
+    				//console.log(m);
+    				p = true
+    				for (var i = 0; i < 3; i++) {
+    					$("#tcell"+i+i).css("borderColor","black");
+    					//console.log("tcell"+i+i);
+    				}
+    			}
+    		}
+    		if(!p){
+    			m=""
+    			for (var i = 0; i < 3; i++) {
+    				m += strdata[6-2*i]
+    			}
+    			if(m == coldata){
+    				p = true
+    				for (var i = 0; i < 3; i++) {
+    					$("#tcell"+(2-i)+i).css("borderColor","black");
+    				}
+    			}
+    		}
+    		return p;
+    	}
+
+      function iswin(strdata){
+        return check(strdata,'111');
+      }
+      function isloose(strdata){
+        return check(strdata,'222');
+      }
+      function iscomplete(strdata){
+        var c =0;
+        for (var i = 0; i < 3; i++) {
+          for (var j = 0; j < 3; j++) {
+            if (strdata[i*3+j]=='0') {
+              c+=1;
+            }
+          }
+        }
+        return c==0;
+      }
+      function checkdata(){
+        var m = makedata()
+
+        function genfun(){
+          comp = true;
+          rest = true;
+          defaultcolor = $("#Restart").css("backgroundColor")
+          $("#Restart").css("backgroundColor","green")
+          $("#Restart").css("color","white")
+        }
+
+        if(iswin(m)){
+          $("#turn").html('WON');
+          $("#turn").css("backgroundColor","green")
+          genfun();
+        }
+        else if(isloose(m)){
+          $("#turn").html("LOST");
+          $("#turn").css("backgroundColor","red")
+          genfun();
+        }
+        else if(iscomplete(m)){
+          $("#turn").html("DRAW");
+          $("#turn").css("backgroundColor","blue")
+          genfun();
+        }
+      }
+
+
+      function refresh_turn(){
+        if(user_allow)
+          $("#turn").css("backgroundColor","green");
+        else
+          $("#turn").css("backgroundColor","red")
+      }
+
+      function fitdata(statedata){
+        console.log(statedata);
+        //statedata
+        console.log(statedata[i]);
+        for (var i = 0; i < l.length; i++) {
+          if(statedata[i]==1)
+            l[i].src = our;
+          else if(statedata[i]==2)
+            l[i].src = opp;
+        }
+      }
+
+      function makedata(){
+        var s = ""
+        l.forEach(function(i){
+          if(i.src === blank)
+            s+='0'
+          else if(i.src === our)
+            s+='1'
+          else
+            s+='2'
+        })
+        return s;
+      }
+
+      function resrt(){
+        if(comp && rest){
+          //if(!rest){
+            rest = false;
+            $("#Restart").css("backgroundColor","red");
+            console.log("clicked resrt when rest was false");
+            getre()
+          //}
+        }
+      }
+
+      document.querySelector("#Restart").addEventListener("click",resrt)
+
+      function getre(){
+        console.log("getre");
+        $.get(
+          "{% url 'rechannel' %}",
+          function(data){
+            if(data.re){
+              console.log("true returned")
+              //rest = true;
+              l.forEach(function(item){
+                item.src = blank;
+              })
+              $("td").css("borderColor","yellow")
+              comp = false;
+              $("#Restart").css("color","black")
+              $("#Restart").css("backgroundColor",defaultcolor);
+              $("#turn").html("Your Turn");
+              user_allow = {% if user_allow %}true{% else %}false{% endif %}
+              refresh_turn();
+              if(!user_allow){
+                getfun();
+              }
+            }
+            else{
+              setTimeout(getre,5000);
+            }
+          }
+        )
+      }
+
+      function getfun(){
+        $.get(
+          "{% url 'playchannel' %}",
+          function(data){
+            console.log('getdata');
+            console.log(data);
+            if(data.update){
+              fitdata(data.state);
+              user_allow = true;
+              refresh_turn();
+              checkdata();
+            }
+            else if(!comp){
+              setTimeout(getfun, 2000);
+            }
+          }
+        )
+      }
+
+      function postfun(postdata){
+        $.post(
+          "{% url 'playchannel' %}",
+          {
+            "state":postdata,
+            "csrfmiddlewaretoken":"{{csrf_token}}"
+          },
+          function(){
+            getfun();
+          }
+        )
+      }
+
+      function userturn(item){
+        item.addEventListener("click",function(){
+          if(!comp && user_allow && item.src === blank){
+            user_allow = false
+            refresh_turn();
+            item.src = our;
+            var postdata = makedata();
+            checkdata();
+            //console.log(postdata);
+            postfun(postdata);
+          }
+        })
+      }
+      l.forEach(userturn);
+
+      fitdata({{state_data}});
+      refresh_turn();
+      checkdata();
+      if(!user_allow){
+        getfun();
+      }
+  </script>
 </html>
