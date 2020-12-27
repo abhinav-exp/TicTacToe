@@ -1,18 +1,56 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>HOME</title>
+	<link rel="icon" href="{% static 'green.jpg' %}">
+	<style media="screen">
+		body{
+			background-color: green;
+			text-align: center;
+		}
+		.all{
+			background-color: lightgreen;
+			border: 5px solid darkgreen;
+		}
+		input{
+			background-color: blue;
+			color: white;
+		}
+	</style>
 </head>
 <body>
-	<h1>Tic Tac Toe</h1>
-	<h3>Thanks for reviewing my project. you can give your here.</h4>
-	<h4>Mail : B519002@iiit-bh.ac.in</h4>
-	<h4>Moblie No : 8368767178</h4>
-	<a href="{% url 'bot' %}">
-		<input type="button" value="bot">
-	</a><br>
-	<a href="{% url 'room' %}">
-		<input type="button" value="friends">
-	</a>
+	<div class="all">
+		<h1>Tic Tac Toe</h1>
+		<a href="{% url 'bot' %}">
+			<input type="button" value="Bot">
+		</a><br><br>
+		<a href="{% url 'room' %}">
+			<input type="button" value="Friends">
+		</a><br><br>
+		<p>Thanks for reviewing my project.</p>
+		<p>Project Developer : Abhinav Kumar</p>
+		<p>Email : kabhinav482@gmail.com</p>
+		<p>Moblie No : 8368767178</p>
+	</div>
 </body>
+<script src = "{% static 'jquery.js' %}"></script>
+<script type="text/javascript">
+	var win_h = $(window).height()
+	var win_b = $(window).width()
+	var all = $(".all")
+	all.css("marginLeft",win_b/10+"px");
+	all.css("marginRight",win_b/10+"px");
+	all.css("marginTop",win_b/10+"px");
+	all.css("border-radius",win_b*4/100+"px");
+	all.css("border-width",win_b*4/1000+"px");
+	var h1 = $("h1")
+	h1.css("font-size",win_b*15/100+"px")
+	var input = $("input")
+	input.css("font-size",win_b/10+"px")
+	input.css("padding",win_b/40+"px")
+	input.css("border-radius",win_b/40+"px");
+	var p = $("p")
+	p.css("font-size",win_b/20+"px")
+</script>
 </html>
