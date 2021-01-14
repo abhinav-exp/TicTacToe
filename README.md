@@ -1,5 +1,5 @@
 # TicTacToe
-it is a django web app. it is simply a game for tictactoe. the bot section(single player) is completed but friends section(multiplayer) is being done.
+It is a simple Django-based TicTacToe game where the options of both single-player and double-player are given. Single-players can play with the bot and double-players can get a room and play with each other.
 
 #website
 http://abhinavstilllearning.pythonanywhere.com/
