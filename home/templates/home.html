@@ -38,17 +38,19 @@
 <script type="text/javascript">
 	var win_h = $(window).height()
 	var win_b = $(window).width()
+	win_b = win_h*(0.75);
 	var all = $(".all")
-	all.css("marginLeft",win_b/10+"px");
-	all.css("marginRight",win_b/10+"px");
-	all.css("marginTop",win_b/10+"px");
+	all.css("marginLeft",win_b/3+"px");
+	all.css("marginRight",win_b/3+"px");
+	all.css("marginTop",win_b/20+"px");
 	all.css("border-radius",win_b*4/100+"px");
 	all.css("border-width",win_b*4/1000+"px");
 	var h1 = $("h1")
-	h1.css("font-size",win_b*15/100+"px")
+	h1.css("font-size",win_b*20/100+"px")
+	h1.css("margin-bottom", "0px")
 	var input = $("input")
 	input.css("font-size",win_b/10+"px")
-	input.css("padding",win_b/40+"px")
+	input.css("padding",win_b/50+"px")
 	input.css("border-radius",win_b/40+"px");
 	var p = $("p")
 	p.css("font-size",win_b/20+"px")
