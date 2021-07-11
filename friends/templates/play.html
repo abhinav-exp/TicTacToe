@@ -10,14 +10,14 @@
       text-align: center;
       width: 500px;
       margin: auto;
-      //background-color: green;
+      /* //background-color: green; */
     }
     table{
       margin: auto;
     }
     td{
       border: solid 2px Yellow;
-      //border-collapse: collapse;
+      /* //border-collapse: collapse; */
       background-color: Yellow;
       margin: auto;
     }
@@ -49,7 +49,7 @@
     <img src="{% static 'blue.jpg' %}" hidden>
     <img src="{% static 'red.png' %}" hidden>
     	<div class="all">
-    		<div class="uppertext">
+    		<div class="uppertext"> 
     			<strong>{{ room_no }}</strong><br>
     			<button id = "Restart" type="button">Restart</button>
     			<button id = "turn" type="button">Your Turn</button>
@@ -68,13 +68,13 @@
     	</div>
   </body>
   <script type="text/javascript">
-  	var win_b = $(window).width()
+  	var win_b = $(window).height()*0.7
   	$(".all").css("width",win_b*9/10+"px")
   	var uppertext = $(".uppertext")
   	uppertext.css("height",win_b*3/10+"px")
   	uppertext.css("font-size",win_b/10+"px");
-  	uppertext.css("padding-top",win_b/10+"px");
-  	uppertext.css("margin-bottom",win_b/10+"px")
+  	uppertext.css("padding-top","0px");
+  	uppertext.css("margin-bottom",win_b/20+"px")
   	var button = $("button")
   	button.css("height",win_b/10+"px")
   	button.css("width",win_b*2/5+"px")
