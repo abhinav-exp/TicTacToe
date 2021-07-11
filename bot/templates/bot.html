@@ -73,13 +73,13 @@
 	</div>
 </body>
 <script type="text/javascript">
-	var win_b = $(window).width()
+	var win_b = $(window).height()*0.70
 	$(".all").css("width",win_b*9/10+"px")
 	var uppertext = $(".uppertext")
 	uppertext.css("height",win_b*3/10+"px")
 	uppertext.css("font-size",win_b/10+"px");
-	uppertext.css("padding-top",win_b/10+"px");
-	uppertext.css("margin-bottom",win_b/10+"px")
+	uppertext.css("padding-top","0px");
+	uppertext.css("margin-bottom",win_b/20+"px");
 	var button = $("button")
 	button.css("height",win_b/10+"px")
 	button.css("width",win_b*2/5+"px")
