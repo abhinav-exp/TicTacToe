@@ -25,7 +25,7 @@ SECRET_KEY = 'u2iji8f$ij4#)$f2kh4n-ozb_($k)sf-=cfy6n#8-30(!!74+r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', 'tictacto3.herokuapp.com']
 
 
 # Application definition
